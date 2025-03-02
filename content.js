@@ -1,5 +1,11 @@
 function applyFont(font) {
     let style = document.getElementById('font-override-style');
+    if (font === 'Off') {
+      if (style) {
+        style.remove(); // Remove the style tag if it exists
+      }
+      return;
+    }
     if (!style) {
       style = document.createElement('style');
       style.id = 'font-override-style';
@@ -10,7 +16,7 @@ function applyFont(font) {
   
   // Apply the font on page load
   chrome.storage.sync.get('selectedFont', function(data) {
-    const font = data.selectedFont || 'Times New Roman';
+    const font = data.selectedFont || 'Off';
     applyFont(font);
   });
   
