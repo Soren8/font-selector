@@ -18,12 +18,10 @@ function applyFont(font) {
         fontLink = document.createElement('link');
         fontLink.id = 'font-override-link';
         fontLink.rel = 'stylesheet';
-        // Load both JetBrains Mono and Atkinson Hyperlegible
         fontLink.href = 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Atkinson+Hyperlegible:wght@400&display=swap';
         document.head.appendChild(fontLink);
       }
     } else if (fontLink) {
-      // Remove the font link if a system font is selected
       fontLink.remove();
     }
   
@@ -39,7 +37,7 @@ function applyFont(font) {
   
   // Apply the font when the page loads
   chrome.storage.sync.get('selectedFont', function(data) {
-    const font = data.selectedFont || 'Off';
+    const font = data.selectedFont || 'Atkinson Hyperlegible';
     applyFont(font);
   });
   
