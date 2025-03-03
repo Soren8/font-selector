@@ -3,17 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <title>Font Changer</title>
+  <style>
+    body {
+      min-width: 200px;
+      padding: 10px;
+    }
+    .control-group {
+      margin-bottom: 10px;
+    }
+    .size-controls {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .size-controls button {
+      margin: 0 5px;
+    }
+    #size-display {
+      margin: 0 10px;
+      min-width: 30px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <select id="font-select">
-    <option value="Off">Off</option>
-    <option value="Atkinson Hyperlegible">Atkinson Hyperlegible</option>
-    <option value="JetBrains Mono">JetBrains Mono</option>
-    <option value="Times New Roman">Times New Roman</option>
-    <option value="Arial">Arial</option>
-    <option value="Courier New">Courier New</option>
-    <option value="Verdana">Verdana</option>
-  </select>
+  <div class="control-group">
+    <label for="font-select">Font:</label>
+    <select id="font-select">
+      <option value="Off">Off</option>
+      <option value="Atkinson Hyperlegible">Atkinson Hyperlegible</option>
+      <option value="JetBrains Mono">JetBrains Mono</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Arial">Arial</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Verdana">Verdana</option>
+    </select>
+  </div>
+  
+  <div class="control-group">
+    <label>Font Size:</label>
+    <div class="size-controls">
+      <button id="decrease-size">-</button>
+      <span id="size-display">100%</span>
+      <button id="increase-size">+</button>
+      <button id="reset-size">Reset</button>
+    </div>
+  </div>
+  
   <script src="popup.js"></script>
 </body>
 </html>

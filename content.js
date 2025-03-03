@@ -15,7 +15,7 @@ function injectFontCSS() {
 // Call immediately when script loads
 injectFontCSS();
 
-async function applyFont(font) {
+async function applyFontAndSize(font, fontSize) {
   let style = document.getElementById('font-override-style');
   
   // If "Off" is selected, remove the style
@@ -51,22 +51,55 @@ async function applyFont(font) {
   // Remove any existing style to avoid conflicts
   if (style) style.remove();
   
+  // Create CSS for font family and size
+  let css = '';
+  
+  // Add font-family if a font is selected
+  if (font !== 'Off') {
+    css += `* { font-family: "${font}" !important; }\n`;
+  }
+  
+  // Add font-size adjustments
+  if (fontSize && fontSize !== 100) {
+    // Calculate the size adjustment
+    const adjustedSize = `${fontSize}%`;
+    
+    // Apply a simple, direct approach that works well in practice
+    css += `
+      /* Set the base font size on the root element */
+      html {
+        font-size: ${adjustedSize} !important;
+      }
+      
+      /* Keep form controls at a reasonable size */
+      input, select, textarea, button {
+        font-size: 1rem !important;
+      }
+    `;
+  }
+  
   // Create a new style to apply the font universally
   style = document.createElement('style');
   style.id = 'font-override-style';
-  style.innerHTML = `* { font-family: "${font}" !important; }`;
+  style.innerHTML = css;
   document.head.appendChild(style);
 }
   
-  // Apply the font when the page loads
-  chrome.storage.sync.get('selectedFont', async function(data) {
+  // Apply the font and size when the page loads
+  chrome.storage.sync.get(['selectedFont', 'fontSize'], async function(data) {
     const font = data.selectedFont || 'Atkinson Hyperlegible'; // Default font
-    await applyFont(font);
+    const fontSize = data.fontSize || 100; // Default font size
+    await applyFontAndSize(font, fontSize);
   });
   
-  // Listen for font changes from the extension popup
+  // Listen for font or font size changes from the extension popup
   chrome.storage.onChanged.addListener(function(changes, namespace) {
-    if (changes.selectedFont) {
-      applyFont(changes.selectedFont.newValue);
+    // If either font or font size changes, reapply both
+    if (changes.selectedFont || changes.fontSize) {
+      chrome.storage.sync.get(['selectedFont', 'fontSize'], function(data) {
+        const font = data.selectedFont || 'Atkinson Hyperlegible';
+        const fontSize = data.fontSize || 100;
+        applyFontAndSize(font, fontSize);
+      });
     }
   });
